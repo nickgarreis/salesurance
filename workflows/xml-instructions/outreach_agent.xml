@@ -77,7 +77,7 @@
         
         <LinkedInMessage>
             <Purpose>Provide local SEO insight and soft introduction to scaling solution</Purpose>
-            <Structure>Hi [Name], [Reference to connection]. [Relevant local SEO insight for their clients]. [Soft scalability value]. [Thoughtful question]?</Structure>
+            <Structure>Hi [Name], [Relevant local SEO insight for their clients]. [Soft scalability value]. [Thoughtful question]?</Structure>
             <CharLimit>300-500 characters</CharLimit>
             <Tone>Helpful, insightful, conversational</Tone>
             <ValueTeaser>Hint at scaling solution without full platform pitch</ValueTeaser>
@@ -90,7 +90,7 @@
                 <Style>Specific, professional, value-focused</Style>
             </Subject>
             <Body>
-                <Opening>Reference to LinkedIn connection or specific agency trigger</Opening>
+                <Opening>Start with "Hey {name}, ich hatte versucht dich per LinkedIn zu erreichen, aber bin mir nicht sicher, ob du dort so aktiv bist."</Opening>
                 <ProblemInsight>Address manual local SEO challenges for agency's client type</ProblemInsight>
                 <SolutionValue>White-label platform benefits with specific metrics (75% more calls, 28% more traffic)</SolutionValue>
                 <SocialProof>Brief mention of similar agency success (Henkel/Bosch examples)</SocialProof>
@@ -155,7 +155,7 @@
             </ResearchInput>
             <Output>
                 <linkedin_invite>Hi Thomas! Dein OMR-Vortrag über Mittelstand-Digitalisierung hat mich zum Nachdenken gebracht. Als Kollege im Local-SEO-Bereich würde ich gerne über Skalierungsansätze für Agenturen austauschen.</linkedin_invite>
-                <linkedin_message>Hi Thomas, danke fürs Connecten! Nach deinem OMR-Vortrag dachte ich an deine Kanzlei- und Handwerks-Kunden: 80% kämpfen mit inkonsistenten Standortdaten über 60+ Plattformen. Wir helfen Agenturen dabei, Local SEO White-Label zu skalieren. Wie löst ihr das aktuell bei 80 Kunden?</linkedin_message>
+                <linkedin_message>Hi Thomas, nach deinem OMR-Vortrag dachte ich an deine Kanzlei- und Handwerks-Kunden: 80% kämpfen mit inkonsistenten Standortdaten über 60+ Plattformen. Wir helfen Agenturen dabei, Local SEO White-Label zu skalieren. Wie löst ihr das aktuell bei 80 Kunden?</linkedin_message>
                 <email_subject>Local SEO für Digitalagentur Hamburg skalieren</email_subject>
                 <email_body>Hi Thomas, nach unserem LinkedIn-Austausch zur Local-SEO-Skalierung: Eure Kanzlei- und Handwerks-Kunden brauchen Standortmarketing über 60+ Publisher (GMB, Apple, Bing). Manuell unmöglich bei 80 Kunden. Unsere White-Label-Plattform hat ähnlichen Agenturen geholfen: 75% mehr Anrufe, 28% mehr Local Traffic für deren Kunden. Henkel und Bosch nutzen die Technologie bereits. 15 Min diese Woche für eine Demo der Plattform mit eurem Branding? Beste Grüße</email_body>
             </Output>
@@ -197,23 +197,6 @@
         <ActionableOutcome>Email ends with specific, easy-to-accept demo request</ActionableOutcome>
         <CharacterCompliance>All messages within specified limits</CharacterCompliance>
     </SuccessCriteria>
-
-    <IntegrationPoints>
-        <N8NWorkflow>
-            <InputFrom>research-agent output via n8n workflow</InputFrom>
-            <OutputTo>Supabase message updates via structured parser</OutputTo>
-            <DataFlow>JSON formatted for Structured Output Parser</DataFlow>
-        </N8NWorkflow>
-        <DatabaseUpdates>
-            <LinkedIn_Invite>Updates messages table where channel='linkedin_invite'</LinkedIn_Invite>
-            <LinkedIn_Message>Updates messages table where channel='linkedin_message'</LinkedIn_Message>
-            <Email>Updates messages table where channel='email' with body and subject</Email>
-        </DatabaseUpdates>
-        <Dependencies>
-            <Model>Opus 4.1 via OpenRouter for generation</Model>
-            <Parser>Structured Output Parser for JSON formatting</Parser>
-        </Dependencies>
-    </IntegrationPoints>
 
     <OutputFormat>
         <Language>German</Language>
