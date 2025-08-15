@@ -1,4 +1,4 @@
--- /Users/nick/NiCode GmbH/Pokale Meier/supabase/schemas/02-tables.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/schemas/02-tables.sql
 -- Complete table definitions for the agentic marketing system
 -- This file contains all table structures with their columns, defaults, and constraints
 -- RELEVANT FILES: 01-extensions.sql, 03-indexes.sql, 05-functions.sql, 06-triggers.sql
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS public.campaigns (
     dsgvo_footer TEXT, -- GDPR footer text for emails
     auth TEXT, -- Authentication/authorization details
     strategy TEXT[], -- Array of SQL statements for automated message creation
-    email TEXT NOT NULL DEFAULT 'l.eissner@pokal-meier.de' -- Sender email address
+    email TEXT NOT NULL DEFAULT 'marian@salesurance.co' -- Sender email address
 );
 
 -- Leads table: Stores prospect information and research results for each campaign

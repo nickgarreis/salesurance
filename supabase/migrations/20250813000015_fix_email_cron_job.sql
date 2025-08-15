@@ -1,4 +1,4 @@
--- /Users/nick/Pokale Meier/supabase/migrations/20250813000014_fix_email_cron_job.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/migrations/20250813000015_fix_email_cron_job.sql
 -- Fixes the email cron job by removing broken configuration and using proper Supabase Vault approach
 -- Unschedules the old broken job and creates a new working one with proper HTTP calls
 -- RELEVANT FILES: send-email edge function, messages table, pg_cron extension, pg_net extension

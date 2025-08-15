@@ -1,4 +1,4 @@
-// /Users/nick/Pokale Meier/supabase/functions/send-email/index.ts
+// /Users/nick/NiCode GmbH/Salesurance/supabase/functions/send-email/index.ts
 // Edge function to send scheduled outreach emails with DSGVO compliance
 // Processes messages with status='scheduled' and due time <= now, sends via Resend API
 // RELEVANT FILES: messages table schema, campaigns table, receive-emails/index.ts, handle-unsubscribe/index.ts

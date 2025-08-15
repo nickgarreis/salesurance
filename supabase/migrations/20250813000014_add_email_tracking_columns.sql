@@ -1,4 +1,4 @@
--- /Users/nick/Pokale Meier/supabase/migrations/20250813000014_add_email_tracking_columns.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/migrations/20250813000014_add_email_tracking_columns.sql
 -- Adds email tracking columns to messages table for Resend webhook integration
 -- Stores Resend email ID and all email events (sent, delivered, opened, clicked, bounced, etc.) in JSONB
 -- RELEVANT FILES: send-email/index.ts, resend-webhook/index.ts, messages table schema

@@ -3,7 +3,7 @@
 **File location**: `docs/xml-instructions/xml-instructions-best-practices.md`  
 **Purpose**: Comprehensive guide for writing effective XML instruction files for AI agents  
 **Why it exists**: To ensure consistent, maintainable, and high-quality AI agent configurations using modern best practices  
-**Relevant files**: `pokale_meier/instructions/*.xml`, `CLAUDE.md`, `pokale_meier/workflows/outreach.json`, `docs/xml-instructions/xml-templates.md`, `docs/xml-instructions/xml-integration-guide.md`
+**Relevant files**: `workflows/xml-instructions/*.xml`, `CLAUDE.md`, `workflows/outreach-bulk.json`, `docs/xml-instructions/xml-templates.md`, `docs/xml-instructions/xml-integration-guide.md`
 
 ## Introduction
 
@@ -71,7 +71,7 @@ Structure context handling for better AI reasoning:
 Every XML instruction file must include:
 
 ```xml
-<!-- File: pokale_meier/instructions/example_agent.xml -->
+<!-- File: workflows/xml-instructions/example_agent.xml -->
 <!-- Purpose: Handles specific agent functionality with clear objectives -->
 <!-- Why: Enables modular, maintainable AI agent configuration -->
 <!-- Relevant files: related_file1.xml, workflow.json, functions.ts -->

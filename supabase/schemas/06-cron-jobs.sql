@@ -1,4 +1,4 @@
--- /Users/nick/NiCode GmbH/Pokale Meier/supabase/schemas/06-cron-jobs.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/schemas/06-cron-jobs.sql
 -- PostgreSQL cron jobs for automated email sending and system maintenance
 -- These jobs run on a schedule to process pending messages and maintain system health
 -- RELEVANT FILES: 01-extensions.sql, 02-tables.sql, edge functions/send-email

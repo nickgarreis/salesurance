@@ -1,7 +1,7 @@
 -- /Users/nick/agentic_marketing_system/supabase/migrations/20250813000003_prevent_duplicate_leads.sql
 -- Adds function and trigger to prevent duplicate leads with same first_name, last_name, and campaign_id
 -- This ensures data integrity by preventing insertion of leads that already exist in the same campaign
--- RELEVANT FILES: 20250812000001_create_initial_tables.sql, CLAUDE.md, pokale_meier/instructions/outreach_strategy.xml
+-- RELEVANT FILES: 20250812000001_create_initial_tables.sql, CLAUDE.md, workflows/xml-instructions/outreach_agent.xml
 
 -- Create function to check for duplicate leads before insertion
 -- This function will be called by a trigger to prevent duplicate entries

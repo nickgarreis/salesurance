@@ -1,6 +1,6 @@
 # Supabase Declarative Schemas
 
-This directory contains the declarative schema definitions for the Pokale Meier agentic outreach system. These files define the desired state of the database structure and are automatically converted to migrations by Supabase.
+This directory contains the declarative schema definitions for the Salesurance agentic outreach system. These files define the desired state of the database structure and are automatically converted to migrations by Supabase.
 
 ## File Organization
 

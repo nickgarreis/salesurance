@@ -1,4 +1,4 @@
--- /Users/nick/NiCode GmbH/Pokale Meier/supabase/schemas/01-extensions.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/schemas/01-extensions.sql
 -- Defines all PostgreSQL extensions required by the database
 -- These extensions provide UUID generation and cron job scheduling capabilities
 -- RELEVANT FILES: 02-tables.sql, 05-functions.sql, 07-cron-jobs.sql

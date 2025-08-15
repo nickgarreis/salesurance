@@ -105,7 +105,7 @@ git push origin main
 ## 📁 Project Structure
 
 ```
-pokale_meier/
+Salesurance/
 ├── supabase/                   # Database & edge functions
 │   ├── functions/              # Edge function handlers
 │   │   ├── receive-emails/     # Email webhook receiver
@@ -119,13 +119,12 @@ pokale_meier/
 │       ├── 04-functions.sql    # PL/pgSQL functions
 │       ├── 05-triggers.sql     # Database triggers
 │       └── 06-cron-jobs.sql    # Scheduled jobs
-├── pokale_meier/               # AI instructions & workflows
-│   ├── instructions/           # XML prompts for AI agents
-│   │   ├── outreach_strategy.xml
-│   │   ├── research.xml
-│   │   └── write_messages.xml
-│   └── workflows/              # n8n workflow definitions
-│       └── outreach.json
+├── workflows/                  # AI instructions & workflows
+│   ├── xml-instructions/       # XML prompts for AI agents
+│   │   ├── outreach_agent.xml
+│   │   ├── research-agent.xml
+│   │   └── [other_agents].xml
+│   └── outreach-bulk.json      # n8n workflow definition
 ├── render.yaml                 # Render deployment config
 ├── Dockerfile.n8n             # n8n Docker configuration
 ├── requirements.txt            # Python dependencies

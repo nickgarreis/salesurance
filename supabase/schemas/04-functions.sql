@@ -1,4 +1,4 @@
--- /Users/nick/NiCode GmbH/Pokale Meier/supabase/schemas/04-functions.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/schemas/04-functions.sql
 -- Database functions for automated message scheduling and timestamp management
 -- These functions handle business logic for timing, capacity constraints, and automation
 -- RELEVANT FILES: 02-tables.sql, 06-triggers.sql, 07-cron-jobs.sql

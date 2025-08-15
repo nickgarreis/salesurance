@@ -40,7 +40,7 @@
       "credentials": {
         "supabaseApi": {
           "id": "9xVJyFbETt2Ws3mX",
-          "name": "pokale_supabase"
+          "name": "salesurance_supabase"
         }
       }
     },
@@ -83,7 +83,7 @@
       "credentials": {
         "supabaseApi": {
           "id": "9xVJyFbETt2Ws3mX",
-          "name": "pokale_supabase"
+          "name": "salesurance_supabase"
         }
       }
     },
@@ -130,7 +130,7 @@
       "credentials": {
         "supabaseApi": {
           "id": "9xVJyFbETt2Ws3mX",
-          "name": "pokale_supabase"
+          "name": "salesurance_supabase"
         }
       }
     },
@@ -288,7 +288,7 @@
       "credentials": {
         "supabaseApi": {
           "id": "9xVJyFbETt2Ws3mX",
-          "name": "pokale_supabase"
+          "name": "salesurance_supabase"
         }
       }
     },
@@ -336,7 +336,7 @@
       "credentials": {
         "supabaseApi": {
           "id": "9xVJyFbETt2Ws3mX",
-          "name": "pokale_supabase"
+          "name": "salesurance_supabase"
         }
       }
     },
@@ -373,7 +373,7 @@
       "credentials": {
         "supabaseApi": {
           "id": "9xVJyFbETt2Ws3mX",
-          "name": "pokale_supabase"
+          "name": "salesurance_supabase"
         }
       }
     },
@@ -403,7 +403,7 @@
       "credentials": {
         "supabaseApi": {
           "id": "9xVJyFbETt2Ws3mX",
-          "name": "pokale_supabase"
+          "name": "salesurance_supabase"
         }
       }
     }
@@ -585,7 +585,7 @@
       "createdAt": "2025-08-12T22:47:08.310Z",
       "updatedAt": "2025-08-12T22:47:08.310Z",
       "id": "GmsYSu7DFqNRjVyx",
-      "name": "pokale"
+      "name": "salesurance"
     }
   ]
 }

@@ -1,4 +1,4 @@
--- /Users/nick/Pokale Meier/supabase/migrations/20250813000013_create_email_cron_job.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/migrations/20250813000013_create_email_cron_job.sql
 -- Creates pg_cron job to automatically send scheduled emails every 5 minutes
 -- Calls the send-email edge function to process messages with status='active' and due <= now
 -- RELEVANT FILES: send-email edge function, messages table, pg_cron extension

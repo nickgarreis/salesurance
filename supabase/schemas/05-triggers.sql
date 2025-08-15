@@ -1,4 +1,4 @@
--- /Users/nick/NiCode GmbH/Pokale Meier/supabase/schemas/05-triggers.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/schemas/05-triggers.sql
 -- Database triggers for automatic timestamp updates and message scheduling
 -- These triggers handle automated business logic when data changes occur
 -- RELEVANT FILES: 02-tables.sql, 04-functions.sql

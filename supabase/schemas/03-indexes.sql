@@ -1,4 +1,4 @@
--- /Users/nick/NiCode GmbH/Pokale Meier/supabase/schemas/03-indexes.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/schemas/03-indexes.sql
 -- Database indexes for optimizing query performance
 -- These indexes speed up foreign key lookups, status filters, and time-based queries
 -- RELEVANT FILES: 02-tables.sql, 05-functions.sql

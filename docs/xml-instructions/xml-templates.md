@@ -3,14 +3,14 @@
 **File location**: `docs/xml-instructions/xml-templates.md`  
 **Purpose**: Reusable XML templates for common AI agent patterns  
 **Why it exists**: To accelerate development and ensure consistency across agent configurations  
-**Relevant files**: `docs/xml-instructions/xml-instructions-best-practices.md`, `docs/xml-instructions/xml-integration-guide.md`, `pokale_meier/instructions/*.xml`
+**Relevant files**: `docs/xml-instructions/xml-instructions-best-practices.md`, `docs/xml-instructions/xml-integration-guide.md`, `workflows/xml-instructions/*.xml`
 
 ## Template Collection
 
 ### 1. Basic Agent Template
 
 ```xml
-<!-- File: pokale_meier/instructions/[agent_name].xml -->
+<!-- File: workflows/xml-instructions/[agent_name].xml -->
 <!-- Purpose: [Specific agent functionality description] -->
 <!-- Why: [Business need this agent addresses] -->
 <!-- Relevant files: [related_files.xml, workflow.json, functions.ts] -->

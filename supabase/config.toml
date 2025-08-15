@@ -1,4 +1,4 @@
-# /Users/nick/Pokale Meier/supabase/config.toml
+# /Users/nick/NiCode GmbH/Salesurance/supabase/config.toml
 # Supabase cloud deployment configuration for edge functions auto-deployment
 # Minimal configuration compatible with Supabase GitHub integration
 # RELEVANT FILES: functions/*/index.ts, deno.json, migrations/*.sql

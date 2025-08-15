@@ -1,4 +1,4 @@
-// /Users/nick/Pokale Meier/supabase/functions/receive-emails/index.ts
+// /Users/nick/NiCode GmbH/Salesurance/supabase/functions/receive-emails/index.ts
 // Webhook edge function to receive incoming email replies via Resend webhook
 // Finds lead by email address and creates response message, updates lead status to 'responded'
 // RELEVANT FILES: messages table schema, leads table, send-email/index.ts, campaigns table

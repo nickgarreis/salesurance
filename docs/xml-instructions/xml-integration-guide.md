@@ -3,7 +3,7 @@
 **File location**: `docs/xml-instructions/xml-integration-guide.md`  
 **Purpose**: Project-specific guidelines for integrating XML best practices with your tech stack  
 **Why it exists**: To ensure XML instructions work seamlessly with Supabase, n8n, and Render deployment  
-**Relevant files**: `docs/xml-instructions/xml-instructions-best-practices.md`, `docs/xml-instructions/xml-templates.md`, `supabase/config.toml`, `pokale_meier/workflows/outreach.json`
+**Relevant files**: `docs/xml-instructions/xml-instructions-best-practices.md`, `docs/xml-instructions/xml-templates.md`, `supabase/config.toml`, `workflows/outreach-bulk.json`
 
 ## Integration Architecture
 
@@ -103,7 +103,7 @@ XML instructions should align with your n8n workflow structure:
 ```xml
 <N8NIntegration>
     <WorkflowContext>
-        <File>pokale_meier/workflows/outreach.json</File>
+        <File>workflows/outreach-bulk.json</File>
         <ExpectedInputs>
             <Input>lead_data</Input>
             <Input>campaign_config</Input>

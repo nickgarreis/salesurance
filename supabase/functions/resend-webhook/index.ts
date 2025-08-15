@@ -1,4 +1,4 @@
-// /Users/nick/Pokale Meier/supabase/functions/resend-webhook/index.ts
+// /Users/nick/NiCode GmbH/Salesurance/supabase/functions/resend-webhook/index.ts
 // Webhook handler for Resend email events (sent, delivered, opened, clicked, bounced, etc.)
 // Updates messages table with email tracking data using JSONB email_events column
 // RELEVANT FILES: send-email/index.ts, messages table schema, 20250813000014_add_email_tracking_columns.sql

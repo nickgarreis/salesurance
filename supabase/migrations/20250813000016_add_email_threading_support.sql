@@ -1,4 +1,4 @@
--- /Users/nick/Pokale Meier/supabase/migrations/20250813120000_add_email_threading_support.sql
+-- /Users/nick/NiCode GmbH/Salesurance/supabase/migrations/20250813000016_add_email_threading_support.sql
 -- Migration to add email threading support with Message-ID tracking and thread management
 -- Enables follow-up emails in the same conversation thread using proper email headers
 -- RELEVANT FILES: messages table schema, send-email/index.ts, resend-webhook/index.ts
