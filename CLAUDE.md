@@ -55,18 +55,13 @@ This is an agentic-outreach system built with supabase and n8n which is hosted o
 - EXPLAIN EVERYTHING CLEARLY & COMPLETELY
 - Address ALL of user's points and questions clearly and completely.
 
-## Key Implementation Notes
-
-- **Branch Strategy**: `main` = production, `dev` = development
-- **AI Models**: All accessed via OpenRouter API
-
 # IMPORTANT
 - never EVER push to github unless the User explicitly tells you to.
 
 ## Supabase Development
 
 ### Branch Configuration
-- **Dev Branch Project ID**: `wnqqioudrzffadjonxpv` 
+- **Main Branch Project ID**: `ejlnibieoldtlaoymzvy` 
 
 <SOLID_principles>
 # SOLID PRINCIPLES - NON-NEGOTIABLE ARCHITECTURE RULES
