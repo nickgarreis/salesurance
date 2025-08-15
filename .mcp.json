@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": ["n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true"
+      }
+    },
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--read-only",
+        "--project-ref=hjufieehqrbxmrnnbinh"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "sbp_ec99cf8b6869cfecb456469b9d5cca47c31cde0c"
+      }
+    },
+    "exa": {
+      "command": "npx",
+      "args": [
+        "-y",
+       "exa-mcp-server"
+       ],
+      "env": {
+        "EXA_API_KEY": "93eb2c65-81c6-4ff1-b6f8-e497264c65d6"
+      }
+    }
+  }
+}

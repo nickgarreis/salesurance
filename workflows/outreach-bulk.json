@@ -1,0 +1,591 @@
+{
+  "name": "Outreach",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "messages",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "lead_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get New Lead').item.json.id }}"
+            },
+            {
+              "keyName": "channel",
+              "condition": "eq",
+              "keyValue": "linkedin_message"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $('Outreach Agent').item.json.output.linkedin_message }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        -768
+      ],
+      "id": "caad74b3-c542-4df8-a3c8-990eec04ffa2",
+      "name": "Update linkedin_message",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "pokale_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "messages",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "lead_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get New Lead').item.json.id }}"
+            },
+            {
+              "keyName": "channel",
+              "condition": "eq",
+              "keyValue": "linkedin_invite"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $('Outreach Agent').item.json.output.linkedin_invite }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        -528
+      ],
+      "id": "f63284a3-cdb7-4a3d-b42d-68a641754472",
+      "name": "Update linkedin_invite",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "pokale_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "messages",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "lead_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get New Lead').item.json.id }}"
+            },
+            {
+              "keyName": "channel",
+              "condition": "eq",
+              "keyValue": "email"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $('Outreach Agent').item.json.output.email_body }}"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "={{ $('Outreach Agent').item.json.output.email_subject }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        -304
+      ],
+      "id": "8c7b6cdc-94da-4df6-bca7-177f44a61914",
+      "name": "Update_email",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "pokale_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1344,
+        -496
+      ],
+      "id": "b2db821e-1121-492b-9b0c-32421f6060cc",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -192
+      ],
+      "id": "dddacaa0-f9ab-47ed-85d8-39e9f3e8c642",
+      "name": "Tavily Search",
+      "credentials": {
+        "tavilyApi": {
+          "id": "mfrwDKITawvWBFi6",
+          "name": "Tavily"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"linkedin_invite\": \"\",\n\t\"linkedin_message\": \"\",\n\t\"email_subject\": \"\",\n\t\"email_body\": \"\"\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        -176
+      ],
+      "id": "372585b6-79d4-4146-8aeb-fa8d7e4a5174",
+      "name": "Outreach Output Parser"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"agencyServices\": \"\",\n\t\"clientPortfolio\": \"\",\n\t\"localSEOCapability\": \"\",\n\t\"industryPresence\": \"\",\n\t\"growthSignals\": \"\",\n\t\"personalizationHook\": \"\"\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -160,
+        -208
+      ],
+      "id": "c2fd062d-5ff7-4b3b-903c-2a0df19e4363",
+      "name": "Research Output Parser"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-opus-4.1",
+        "options": {
+          "maxTokens": 8000,
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        176
+      ],
+      "id": "a26253b3-4e99-4488-a627-e0df2b93eafd",
+      "name": "Opus 4.1 Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "EtWjHAO0ZQQs37QB",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Research Information:\n\n{{ $('Research Agent').item.json.output.agencyServices }}\n\n{{ $('Research Agent').item.json.output.clientPortfolio }}\n\n{{ $('Research Agent').item.json.output.localSEOCapability }}\n\n{{ $('Research Agent').item.json.output.industryPresence }}\n\n{{ $('Research Agent').item.json.output.growthSignals }}\n\n{{ $('Research Agent').item.json.output.personalizationHook }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "<AgentInstructions>\n\n    <Role>\n        <Name>Agency Outreach Message Writer Agent</Name>\n        <Task>Transform agency intelligence into compelling, personalized LinkedIn and email messages targeting German marketing agencies for Salesurance's white-label local SEO platform</Task>\n        <Goal>Achieve 15%+ response rates by creating authentic, value-driven messages that lead to demo call bookings with marketing agencies</Goal>\n    </Role>\n\n    <Thinking>\n        <Step>Thoroughly analyze all agency research data and local SEO capability assessment</Step>\n        <Step>Identify 3-5 strongest personalization hooks from agency intelligence</Step>\n        <Step>Map white-label platform value proposition to agency's scalability challenges</Step>\n        <Step>Design sequential message flow: connection → value insight → demo request</Step>\n        <Step>Craft each message with specific character limits and professional agency tone</Step>\n        <Step>Validate personalization depth and B2B sales sequence logic</Step>\n        <Step>Ensure clear call-to-action for demo booking in final touchpoint</Step>\n        <Step>Review for German language quality and agency-appropriate tone</Step>\n    </Thinking>\n\n    <Context>\n        <OurProduct>White-label Standortmarketing-Plattform für Marketing-Agenturen zur Skalierung ihrer Local-SEO-Services mit 60+ Publishern (GMB, Apple, Bing, Facebook, etc.)</OurProduct>\n    </Context>\n\n    <Instructions>\n        <Instruction>Read and internalize all agency intelligence completely before writing</Instruction>\n        <Instruction>Identify specific personalization angles: conference presence, client portfolio, growth signals, local SEO gaps</Instruction>\n        <Instruction>Create linkedin_invite focusing solely on industry connection reason (no selling)</Instruction>\n        <Instruction>Write linkedin_message that references connection and provides local SEO insight</Instruction>\n        <Instruction>Craft email_body with white-label value proposition and clear demo call request</Instruction>\n        <Instruction>Design email_subject that's compelling and agency-relevant</Instruction>\n        <Instruction>Ensure each message builds on previous without repetition</Instruction>\n        <Instruction>Validate all messages meet character limits and B2B quality standards</Instruction>\n    </Instructions>\n\n    <Rules>\n        <Rule>SEQUENTIAL FLOW: linkedin_invite (≤250 chars) → linkedin_message (300-500 chars) → email (≤700 chars)</Rule>\n        <Rule>NO REPETITION: Each message must add new value, not repeat previous content</Rule>\n        <Rule>GERMAN STYLE: Use \"Du\" form, casual-professional tone, avoid buzzwords (\"revolutionär\", \"bahnbrechend\")</Rule>\n        <Rule>AGENCY FOCUS: Minimum 2 agency-specific details per message from intelligence</Rule>\n        <Rule>VALUE FIRST: Lead with scalability insight or local SEO opportunity, not product features</Rule>\n        <Rule>WHITE-LABEL POSITIONING: Emphasize agency's brand expansion and client value</Rule>\n        <Rule>CLEAR CTA: Email must end with specific demo request (15-min call, specific timeframe)</Rule>\n    </Rules>\n\n    <OutputStructure>\n        <Format>\n            <linkedin_invite>Connection request message ≤250 chars</linkedin_invite>\n            <linkedin_message>Follow-up message 300-500 chars</linkedin_message>\n            <email_subject>Compelling subject line ≤60 chars</email_subject>\n            <email_body>Full pitch with CTA ≤700 chars</email_body>\n        </Format>\n    </OutputStructure>\n\n</AgentInstructions>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -32,
+        -560
+      ],
+      "id": "91a59342-6c02-48e4-b04c-243101455fbb",
+      "name": "Outreach Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Lead Information:\nfirst_name: {{ $json.first_name }}\nlast_name: {{ $json.last_name }}\njob_title: {{ $json.job_title }}\nlinkedin: {{ $json.linkedin }}\ncompany_website: {{ $json.company_website }}\ncompany_linkedin: {{ $json.company_linkedin }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "<!-- File: workflows/xml-instructions/research-agent.xml -->\n<!-- Purpose: AI agent for comprehensive lead and company research using Tavily search -->\n<!-- Why: Gathers deep personalization data for hyper-targeted outreach campaigns -->\n<!-- Relevant files: outreach_agent.xml, ../workflows/outreach.json, ../../docs/xml-instructions/xml-instructions-best-practices.md -->\n\n<AgentInstructions>\n\n    <Role>\n        <Name>Marketing Agency Intelligence Research Agent</Name>\n        <Task>Comprehensive research of German marketing agencies using 5 Tavily searches to gather actionable intelligence for white-label local SEO platform outreach</Task>\n        <Goal>Provide high-quality, verified agency information that enables creation of hyper-personalized messages with 15%+ response rates for Salesurance's white-label platform</Goal>\n    </Role>\n\n    <Thinking>\n        <Step>Parse and validate input data (name, company, LinkedIn URLs)</Step>\n        <Step>Define research priorities based on available information</Step>\n        <Step>Execute systematic searches starting with company overview</Step>\n        <Step>Gather lead-specific information and recent activities</Step>\n        <Step>Identify unique personalization angles and pain points</Step>\n        <Step>Synthesize all search results into comprehensive findings</Step>\n        <Step>Structure findings for optimal downstream consumption</Step>\n    </Thinking>\n\n    <Context>\n        <UserProvided>Agency contact first_name, last_name, job_title, linkedin URL, agency_website, company_linkedin</UserProvided>\n        <Required>At least agency name or website for meaningful research</Required>\n        <Processing>Combine multiple data points to create comprehensive agency profile</Processing>\n        <Validation>Cross-reference information from multiple searches with focus on local SEO capabilities</Validation>\n    </Context>\n\n    <Instructions>\n        <Instruction>Extract agency and contact information from provided context</Instruction>\n        <Instruction>Research agency's current service portfolio with focus on SEO and digital marketing offerings</Instruction>\n        <Instruction>Identify agency's client portfolio and types of businesses they serve</Instruction>\n        <Instruction>Assess current local SEO and location management capabilities</Instruction>\n        <Instruction>Find recent agency activities, growth signals, and industry presence</Instruction>\n        <Instruction>Discover unique personalization hooks (conference participation, case studies, team expansion)</Instruction>\n        <Instruction>Analyze potential for white-label local SEO platform adoption</Instruction>\n        <Instruction>Execute all 5 planned searches and combine results for comprehensive agency intelligence</Instruction>\n    </Instructions>\n\n    <Tools>\n        <TavilySearch>\n            <Purpose>Primary research tool for web and LinkedIn content</Purpose>\n            <Usage>Execute targeted searches for company and lead information</Usage>\n            <Strategy>Start broad, then refine based on initial results</Strategy>\n            <Strategy>Execute all planned searches sequentially, gather all results</Strategy>\n        </TavilySearch>\n    </Tools>\n\n    <Rules>\n        <Rule>COMPREHENSIVE SEARCH: Execute all 5 searches regardless of individual result quality</Rule>\n        <Rule>SEARCH DEPTH: Minimum 3 searches per lead (company, lead, LinkedIn posts). Maximum 5 searches per lead.</Rule>\n        <Rule>RECENCY PRIORITY: Prefer information from last 30 days, max 90 days</Rule>\n        <Rule>VERIFICATION: Cross-reference critical information from multiple sources</Rule>\n        <Rule>LINKEDIN FOCUS: Prioritize LinkedIn content for professional insights</Rule>\n        <Rule>LANGUAGE: Output in German when lead/company is German-speaking</Rule>\n    </Rules>\n\n    <SearchStrategy>\n        <Phase1>\n            <Query>\"{company_name}\" products services target audience</Query>\n            <Focus>Business model and customer base</Focus>\n        </Phase1>\n        <Phase2>\n            <Query>\"{company_name}\" USP competitive advantage differentiator</Query>\n            <Focus>Unique value propositions</Focus>\n        </Phase2>\n        <Phase3>\n            <Query>\"{first_name} {last_name}\" \"{company_name}\" LinkedIn recent posts</Query>\n            <Focus>Lead's professional activities</Focus>\n        </Phase3>\n        <Phase4>\n            <Query>site:linkedin.com/posts \"{first_name} {last_name}\"</Query>\n            <Focus>Direct LinkedIn post URLs</Focus>\n        </Phase4>\n        <Phase5>\n            <Query>\"{company_name}\" news updates announcements 2025</Query>\n            <Focus>Recent company developments and milestones</Focus>\n        </Phase5>\n    </SearchStrategy>\n\n    <ErrorHandling>\n        <NoResults>\n            <Detection>Tavily returns empty or irrelevant results</Detection>\n            <Response>Try alternative search strategies or name variations</Response>\n            <Fallback>Focus on available data points (e.g., just company if no lead info)</Fallback>\n        </NoResults>\n        <APIFailure>\n            <Detection>Tavily tool unavailable or timeout</Detection>\n            <Response>Retry with exponential backoff (1s, 2s, 4s)</Response>\n            <Fallback>Return partial results with quality warning</Fallback>\n        </APIFailure>\n        <IncompleteData>\n            <Detection>Missing critical information categories</Detection>\n            <Response>Execute targeted searches for missing data</Response>\n            <Documentation>Note which data points couldn't be found</Documentation>\n        </IncompleteData>\n    </ErrorHandling>\n\n    <ValidationCriteria>\n        <ResearchDepth>\n            <Minimum>Execute all 5 search phases</Minimum>\n            <Optimal>Rich details from multiple searches</Optimal>\n        </ResearchDepth>\n        <Completeness>\n            <Required>ProductAndCustomers, USPs from combined results</Required>\n            <Desired>Unique facts, LinkedIn posts if available</Desired>\n        </Completeness>\n        <Recency>\n            <Ideal>Information from last 30 days</Ideal>\n            <Acceptable>Up to 90 days for evergreen content</Acceptable>\n        </Recency>\n    </ValidationCriteria>\n\n    <Examples>\n        <Example>\n            <Input>\n                first_name: \"Marcus\"\n                last_name: \"Schmidt\"\n                job_title: \"Head of Sales\"\n                company_website: \"https://techsolutions.de\"\n                linkedin: \"https://linkedin.com/in/marcus-schmidt\"\n            </Input>\n            <SearchProcess>\n                1. Search: \"TechSolutions.de products services customers\"\n                2. Search: \"TechSolutions Germany USP competitive advantage\"\n                3. Search: \"Marcus Schmidt TechSolutions LinkedIn recent\"\n                4. Search: site:linkedin.com/posts \"Marcus Schmidt\"\n                5. Search: \"TechSolutions.de\" news updates announcements 2025\n            </SearchProcess>\n            <Output>\n                ProductAndCustomers: \"TechSolutions bietet KI-gestützte CRM-Lösungen für mittelständische B2B-Unternehmen in Deutschland. Zielgruppe: Unternehmen mit 50-500 Mitarbeitern im Vertrieb, speziell im Maschinenbau und der Fertigungsindustrie.\"\n                USPs: \"Einzige deutsche CRM-Lösung mit nativer DATEV-Integration, 100% DSGVO-konform, lokaler Support in deutscher Sprache, 30% schnellere Implementierung als Salesforce.\"\n                Unique: \"Gewinner des German Innovation Award 2024, Marcus Schmidt sprach kürzlich auf der SaaStr Europa über 'Lokalisierung als Wettbewerbsvorteil'.\"\n                linkedinPosts: \"Post 1: Diskussion über Vertriebsautomatisierung im Mittelstand (vor 5 Tagen). Post 2: Ankündigung neuer KI-Features für Q1 2025 (vor 2 Wochen).\"\n            </Output>\n        </Example>\n    </Examples>\n\n    <OutputStructure>\n        <Format>\n            <agencyServices>Detailed description of agency's current service portfolio and positioning</agencyServices>\n            <clientPortfolio>Types of clients served, notable names, industry focus areas</clientPortfolio>\n            <localSEOCapability>Current approach to local SEO and location management (manual/automated/none)</localSEOCapability>\n            <industryPresence>Conference participation, awards, thought leadership activities</industryPresence>\n        </Format>\n    </OutputStructure>\n\n\n    <SuccessCriteria>\n        <InformationDepth>Minimum 3 actionable insights per lead</InformationDepth>\n        <PersonalizationHooks>At least 2 specific details for message customization</PersonalizationHooks>\n        <Completeness>ProductAndCustomers and USPs fields populated</Completeness>\n        <Actionability>Information directly usable for outreach personalization</Actionability>\n    </SuccessCriteria>\n\n    <IntegrationPoints>\n        <N8NWorkflow>\n            <InputFrom>Get New Leads node via lead data</InputFrom>\n            <OutputTo>outreach-agent via structured output parser</OutputTo>\n            <DataFormat>JSON matching Structured Output Parser schema</DataFormat>\n        </N8NWorkflow>\n        <Dependencies>\n            <Required>Tavily API credentials configured</Required>\n            <Model>OpenRouter Grok-4 for processing</Model>\n        </Dependencies>\n    </IntegrationPoints>\n\n    <OutputFormat>\n        <Language>German for German companies, English otherwise</Language>\n        <Structure>JSON-compatible for n8n parser</Structure>\n        <Encoding>UTF-8 with proper special character handling</Encoding>\n    </OutputFormat>\n\n</AgentInstructions>",
+          "maxIterations": 15
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -352,
+        -560
+      ],
+      "id": "f62a2c45-aaad-4abc-af57-d0ce9ecf9b3d",
+      "name": "Research Agent"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "leads",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "new"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -944,
+        -576
+      ],
+      "id": "377e8731-982d-42d8-9b4e-827d1f330c5e",
+      "name": "Get New Lead",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "pokale_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1344,
+        -656
+      ],
+      "id": "2b5d3c75-09c1-4e51-9335-9e1092689370",
+      "name": "Manual Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get New Lead').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "processing"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -592
+      ],
+      "id": "28436f1f-84d8-4824-ac42-9b8c00ea8c64",
+      "name": "Set Processing Status",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "pokale_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get New Lead').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "active"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        352,
+        -576
+      ],
+      "id": "cd7bdde8-2367-4b06-af1e-1f45b07073f7",
+      "name": "Set Active Status",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "pokale_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "messages",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "lead_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get New Lead').item.json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -576
+      ],
+      "id": "63e6c66a-de85-4839-a510-1023f23cecc7",
+      "name": "Get Scheduled Messages",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "pokale_supabase"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get New Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Opus 4.1 Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Research Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Outreach Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Outreach Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Research Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outreach Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Outreach Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outreach Agent": {
+      "main": [
+        [
+          {
+            "node": "Set Active Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent": {
+      "main": [
+        [
+          {
+            "node": "Outreach Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get New Lead": {
+      "main": [
+        [
+          {
+            "node": "Set Processing Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get New Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Processing Status": {
+      "main": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Active Status": {
+      "main": [
+        [
+          {
+            "node": "Get Scheduled Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Scheduled Messages": {
+      "main": [
+        [
+          {
+            "node": "Update_email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update linkedin_invite",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update linkedin_message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Berlin",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "e74c560c-fa63-4a6c-8557-7834cfcdfb49",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "893b5e5f413c3c4ed0e2d0297fa4dd39d8869ce55ce474ca7e21dca71fabc0bf"
+  },
+  "id": "5eIxTi4Sx95vDllB",
+  "tags": [
+    {
+      "createdAt": "2025-08-12T22:47:08.310Z",
+      "updatedAt": "2025-08-12T22:47:08.310Z",
+      "id": "GmsYSu7DFqNRjVyx",
+      "name": "pokale"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+# /Users/nick/Pokale Meier/supabase/config.toml
+# Supabase cloud deployment configuration for edge functions auto-deployment
+# Minimal configuration compatible with Supabase GitHub integration
+# RELEVANT FILES: functions/*/index.ts, deno.json, migrations/*.sql
+
+# Project metadata
+project_id = "YOUR_PROJECT_ID"
+
+# Database configuration
+[db]
+major_version = 15
+
+# Declarative schema configuration
+# Schema files are applied in alphabetical order
+[db.migrations]
+schema_paths = [
+  "./schemas/01-extensions.sql",
+  "./schemas/02-tables.sql", 
+  "./schemas/03-indexes.sql",
+  "./schemas/04-functions.sql",
+  "./schemas/05-triggers.sql",
+  "./schemas/06-cron-jobs.sql"
+]
+
+# API configuration  
+[api]
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+
+# Edge Functions configuration
+[functions.send-email]
+verify_jwt = false
+
+
+[functions.receive-emails]
+verify_jwt = false
+
+[functions.resend-webhook]
+verify_jwt = false
