@@ -369,3 +369,46 @@ COMMENT ON FUNCTION public.create_messages_on_processing_status() IS 'Main trigg
 COMMENT ON FUNCTION public.test_automated_messaging() IS 'Test function to verify the automated messaging system works correctly';
 COMMENT ON FUNCTION public.test_campaign_isolation() IS 'Tests that campaigns maintain scheduling isolation from each other using TEXT[] strategy format';
 COMMENT ON FUNCTION public.prevent_duplicate_leads() IS 'Trigger function to prevent duplicate leads with same first_name, last_name, and campaign_id';
+
+-- Function to get due messages for email sending with all required data
+-- Used by send-email edge function to bypass complex join issues in edge function environment
+-- Returns scheduled messages that are due for sending with all related lead and campaign data
+CREATE OR REPLACE FUNCTION public.get_due_messages()
+RETURNS TABLE (
+  id uuid,
+  lead_id uuid,
+  campaign_id uuid,
+  subject text,
+  message text,
+  sender text,
+  lead_email text,
+  lead_status text,
+  lead_company_website text,
+  lead_campaign_id uuid,
+  campaign_email text
+) 
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT 
+    m.id,
+    m.lead_id,
+    m.campaign_id,
+    m.subject,
+    m.message,
+    m.sender,
+    l.email as lead_email,
+    l.status as lead_status,
+    l.company_website as lead_company_website,
+    l.campaign_id as lead_campaign_id,
+    c.email as campaign_email
+  FROM messages m
+  INNER JOIN leads l ON m.lead_id = l.id
+  INNER JOIN campaigns c ON m.campaign_id = c.id
+  WHERE m.status = 'scheduled'
+    AND m.due <= NOW()
+  ORDER BY m.due ASC;
+$$;
+
+COMMENT ON FUNCTION public.get_due_messages() IS 'Returns all scheduled messages that are due for sending, with lead and campaign data included. Used by send-email edge function to avoid complex join issues.';
