@@ -87,6 +87,32 @@ ALTER TABLE public.campaigns ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
+-- Row Level Security Policies
+-- Allow full access for all authenticated roles (adjust for your security requirements)
+CREATE POLICY "Allow full access to clients" ON clients
+    FOR ALL
+    TO authenticated, anon, service_role
+    USING (true)
+    WITH CHECK (true);
+
+CREATE POLICY "Allow full access to campaigns" ON campaigns
+    FOR ALL
+    TO authenticated, anon, service_role
+    USING (true)
+    WITH CHECK (true);
+
+CREATE POLICY "Allow full access to leads" ON leads
+    FOR ALL
+    TO authenticated, anon, service_role
+    USING (true)
+    WITH CHECK (true);
+
+CREATE POLICY "Allow full access to messages" ON messages
+    FOR ALL
+    TO authenticated, anon, service_role
+    USING (true)
+    WITH CHECK (true);
+
 -- Grant full access to authenticated and service role (adjust as needed for your security requirements)
 GRANT ALL ON public.clients TO authenticated, service_role;
 GRANT ALL ON public.campaigns TO authenticated, service_role;

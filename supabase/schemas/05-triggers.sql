@@ -41,9 +41,18 @@ CREATE TRIGGER trigger_create_messages_on_processing
     FOR EACH ROW
     EXECUTE FUNCTION public.create_messages_on_processing_status();
 
+-- Trigger to prevent duplicate leads before insertion
+-- This trigger will automatically check for duplicates on every new lead insertion
+DROP TRIGGER IF EXISTS prevent_duplicate_leads_trigger ON public.leads;
+CREATE TRIGGER prevent_duplicate_leads_trigger
+    BEFORE INSERT ON public.leads
+    FOR EACH ROW
+    EXECUTE FUNCTION public.prevent_duplicate_leads();
+
 -- Add trigger comments for documentation
 COMMENT ON TRIGGER update_clients_updated_at ON public.clients IS 'Automatically updates updated_at timestamp when client record is modified';
 COMMENT ON TRIGGER update_campaigns_updated_at ON public.campaigns IS 'Automatically updates updated_at timestamp when campaign record is modified';
 COMMENT ON TRIGGER update_leads_updated_at ON public.leads IS 'Automatically updates updated_at timestamp when lead record is modified';
 COMMENT ON TRIGGER update_messages_updated_at ON public.messages IS 'Automatically updates updated_at timestamp when message record is modified';
 COMMENT ON TRIGGER trigger_create_messages_on_processing ON public.leads IS 'Creates scheduled messages automatically when lead status changes to processing';
+COMMENT ON TRIGGER prevent_duplicate_leads_trigger ON public.leads IS 'Prevents insertion of duplicate leads with same first_name, last_name, and campaign_id';

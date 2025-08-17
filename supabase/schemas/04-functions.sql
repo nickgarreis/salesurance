@@ -274,6 +274,91 @@ EXCEPTION WHEN OTHERS THEN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Function to check for duplicate leads before insertion
+-- This function will be called by a trigger to prevent duplicate entries
+CREATE OR REPLACE FUNCTION public.prevent_duplicate_leads()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Check if a lead already exists with the same first_name, last_name, and campaign_id
+    IF EXISTS (
+        SELECT 1 FROM public.leads 
+        WHERE first_name = NEW.first_name 
+        AND last_name = NEW.last_name 
+        AND campaign_id = NEW.campaign_id
+    ) THEN
+        -- If duplicate found, prevent insertion by returning NULL
+        -- This effectively cancels the INSERT operation
+        RETURN NULL;
+    END IF;
+    
+    -- If no duplicate found, allow the insertion to proceed
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function for testing campaign isolation with TEXT[] strategy format
+CREATE OR REPLACE FUNCTION public.test_campaign_isolation()
+RETURNS TEXT AS $$
+DECLARE
+    campaign_a_id UUID;
+    campaign_b_id UUID;
+    client_id UUID;
+    lead_a_id UUID;
+    lead_b_id UUID;
+    messages_a INTEGER;
+    messages_b INTEGER;
+    result_text TEXT := '';
+BEGIN
+    -- Create test client
+    INSERT INTO public.clients (name, status) VALUES ('Campaign Isolation Test Client', 'active')
+    RETURNING id INTO client_id;
+    
+    -- Create two separate campaigns with TEXT[] strategies
+    INSERT INTO public.campaigns (client_id, name, status, strategy) 
+    VALUES (client_id, 'Campaign A', 'active', ARRAY['INSERT INTO messages (campaign_id, lead_id, status, channel, message, sender, due) VALUES ($1, $2, ''scheduled'', ''email'', ''Message from Campaign A'', ''sales@company.com'', $3)'])
+    RETURNING id INTO campaign_a_id;
+    
+    INSERT INTO public.campaigns (client_id, name, status, strategy) 
+    VALUES (client_id, 'Campaign B', 'active', ARRAY['INSERT INTO messages (campaign_id, lead_id, status, channel, message, sender, due) VALUES ($1, $2, ''scheduled'', ''email'', ''Message from Campaign B'', ''sales@company.com'', $3)'])
+    RETURNING id INTO campaign_b_id;
+    
+    -- Create leads for both campaigns
+    INSERT INTO public.leads (campaign_id, first_name, last_name, email, status)
+    VALUES (campaign_a_id, 'Alice', 'Smith', 'alice@example.com', 'new')
+    RETURNING id INTO lead_a_id;
+    
+    INSERT INTO public.leads (campaign_id, first_name, last_name, email, status)
+    VALUES (campaign_b_id, 'Bob', 'Johnson', 'bob@example.com', 'new')
+    RETURNING id INTO lead_b_id;
+    
+    -- Trigger both campaigns by changing status to processing
+    UPDATE public.leads SET status = 'processing' WHERE id = lead_a_id;
+    UPDATE public.leads SET status = 'processing' WHERE id = lead_b_id;
+    
+    -- Count messages for each campaign
+    SELECT COUNT(*) INTO messages_a FROM public.messages WHERE campaign_id = campaign_a_id;
+    SELECT COUNT(*) INTO messages_b FROM public.messages WHERE campaign_id = campaign_b_id;
+    
+    result_text := 'Campaign A messages: ' || messages_a || ', Campaign B messages: ' || messages_b;
+    
+    IF messages_a = 1 AND messages_b = 1 THEN
+        result_text := result_text || ' - PASS: Campaign isolation working correctly with TEXT[] format';
+    ELSE
+        result_text := result_text || ' - FAIL: Campaign isolation not working with TEXT[] format';
+    END IF;
+    
+    -- Cleanup
+    DELETE FROM public.clients WHERE id = client_id;
+    
+    RETURN result_text;
+    
+EXCEPTION WHEN OTHERS THEN
+    -- Clean up on error
+    DELETE FROM public.clients WHERE id = client_id;
+    RETURN 'Campaign isolation test failed with error: ' || SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Add function comments for documentation
 COMMENT ON FUNCTION public.update_updated_at_column() IS 'Automatically updates the updated_at timestamp when a row is modified';
 COMMENT ON FUNCTION public.is_business_hours(TIMESTAMPTZ) IS 'Checks if a timestamp falls within business hours (Mon-Fri 9AM-6PM Berlin time)';
@@ -282,3 +367,5 @@ COMMENT ON FUNCTION public.get_campaign_daily_message_count(UUID, DATE) IS 'Retu
 COMMENT ON FUNCTION public.get_next_available_slot(UUID, TIMESTAMPTZ, INTEGER) IS 'Finds next available time slot respecting all scheduling constraints';
 COMMENT ON FUNCTION public.create_messages_on_processing_status() IS 'Main trigger function that creates scheduled messages when lead status changes to processing';
 COMMENT ON FUNCTION public.test_automated_messaging() IS 'Test function to verify the automated messaging system works correctly';
+COMMENT ON FUNCTION public.test_campaign_isolation() IS 'Tests that campaigns maintain scheduling isolation from each other using TEXT[] strategy format';
+COMMENT ON FUNCTION public.prevent_duplicate_leads() IS 'Trigger function to prevent duplicate leads with same first_name, last_name, and campaign_id';
