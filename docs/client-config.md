@@ -3,7 +3,7 @@
 **File location**: `docs/client-config.md`  
 **Purpose**: Complete step-by-step guide for migrating this project to a new client  
 **Why it exists**: To ensure no client-specific references are missed when switching to a new client  
-**Relevant files**: `project-description.md`, `supabase/schemas/02-tables.sql`, `workflows/outreach-bulk.json`, `README.md`
+**Relevant files**: `project-description.md`, `supabase/migrations/`, `workflows/outreach-bulk.json`, `README.md`
 
 ## Overview
 
@@ -28,16 +28,13 @@ Before starting, collect the following information for the new client:
 
 ## 1. Database Configuration Changes
 
-### 1.1 Update Schema Files
+### 1.1 Update Migration Files
 
-**File**: `supabase/schemas/02-tables.sql`
-- [ ] **Line 30**: Change default email
+**Files**: Latest migration files in `supabase/migrations/`
+- [ ] **Default email**: Create new migration to change default email
   ```sql
-  # FROM:
-  email TEXT NOT NULL DEFAULT 'marian@salesurance.co' -- Sender email address
-  
-  # TO:
-  email TEXT NOT NULL DEFAULT 'sales@newclient.com' -- Sender email address
+  ALTER TABLE campaigns 
+  ALTER COLUMN email SET DEFAULT 'sales@newclient.com';
   ```
 
 ### 1.3 Update Migration File Headers
@@ -69,27 +66,14 @@ Before starting, collect the following information for the new client:
 
 **Files to update**:
 - [ ] `supabase/config.toml` (Line 1)
-- [ ] `supabase/schemas/01-extensions.sql` (Line 1)
-- [ ] `supabase/schemas/02-tables.sql` (Line 1)
-- [ ] `supabase/schemas/03-indexes.sql` (Line 1)
-- [ ] `supabase/schemas/04-functions.sql` (Line 1)
-- [ ] `supabase/schemas/05-triggers.sql` (Line 1)
-- [ ] `supabase/schemas/06-cron-jobs.sql` (Line 1)
 - [ ] `supabase/functions/send-email/index.ts` (Line 1)
 - [ ] `supabase/functions/resend-webhook/index.ts` (Line 1)
 - [ ] `supabase/functions/receive-emails/index.ts` (Line 1)
+- [ ] All migration files in `supabase/migrations/` (header comments)
 
-### 2.2 Update Schema Documentation
+### 2.2 Update Documentation
 
-**File**: `supabase/schemas/README.md`
-- [ ] **Line 3**: Update description
-  ```markdown
-  # FROM:
-  This directory contains the declarative schema definitions for the Salesurance agentic outreach system.
-  
-  # TO:
-  This directory contains the declarative schema definitions for the NewClient agentic outreach system.
-  ```
+Migration files are now created manually, so no schema documentation to update.
 
 ### 2.3 Update DSGVO Footer (if applicable)
 

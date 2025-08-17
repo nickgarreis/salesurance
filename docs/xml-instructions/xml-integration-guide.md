@@ -76,20 +76,20 @@ Your XML instructions should understand the current schema:
 
 ### Migration-Safe Instructions
 
-Since you use schema files instead of direct MCP modifications:
+Since you create migration files manually:
 
 ```xml
 <DatabaseModifications>
-    <Approach>Schema files in supabase/schemas/ directory</Approach>
+    <Approach>Manual migration files in supabase/migrations/ directory</Approach>
     <Process>
-        <Step>Write changes to schema file</Step>
-        <Step>Run: supabase db diff -f change_name</Step>
-        <Step>Review generated migration</Step>
-        <Step>Apply migration to dev/prod</Step>
+        <Step>Create migration file manually with descriptive name</Step>
+        <Step>Write SQL DDL/DML commands</Step>
+        <Step>Test migration in development environment</Step>
+        <Step>Apply migration to production</Step>
     </Process>
     <Restrictions>
         <NoDirectMCP>Never use MCP for database modifications</NoDirectMCP>
-        <SchemaFirst>Always update schema files first</SchemaFirst>
+        <ManualFirst>Always create migration files manually</ManualFirst>
     </Restrictions>
 </DatabaseModifications>
 ```
@@ -169,7 +169,7 @@ Your XML instructions should leverage read-only Supabase MCP access:
         </ReadOperations>
         <Restrictions>
             <NoWrites>Never use MCP for database modifications</NoWrites>
-            <SchemaUpdates>Use migration files instead</SchemaUpdates>
+            <ManualMigrations>Create migration files manually instead</ManualMigrations>
         </Restrictions>
     </SupabaseMCP>
     

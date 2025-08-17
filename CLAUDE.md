@@ -33,7 +33,7 @@ comment is obsolete, or wrong, then update it - but NEVER mindlessly remove comm
 This is an agentic-outreach system built with supabase and n8n which is hosted on Render.
 
 ### Access to MCPs
-- Supabase MCP: READ-ONLY access to Supabase tables, triggers and edge functions and so on. NEVER use MCP for database modifications-- always write changes in a schema file in the .supabase/migrations folder and then run supabase db diff -f change_name to automtically create a migration file
+- Supabase MCP: READ-ONLY access to Supabase tables, triggers and edge functions and so on. NEVER use MCP for database modifications-- always create migration files manually in the supabase/migrations/ folder
 - N8N MCP: get all available n8n nodes and their structure in order to plan writing workflows in json so the user can just copy and paste them into n8n and they'll work immediately
 - Exa Search MCP: Search the internet, github and other developer orientated sources to get the latest information about coding/developement practices (its 2025)
 
