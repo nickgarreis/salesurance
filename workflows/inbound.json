@@ -1,0 +1,489 @@
+{
+  "name": "Inbound Email Reply Processing",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "event": "messageReceived",
+        "simple": true,
+        "filters": {
+          "readStatus": "unread"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1200,
+        400
+      ],
+      "id": "gmail-trigger",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "marian-gmail",
+          "name": "marian@salesurance.co Gmail"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "leads",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email",
+              "condition": "eq",
+              "keyValue": "={{ $json.from }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -900,
+        400
+      ],
+      "id": "check-lead",
+      "name": "Check If From Lead",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "salesurance_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "lead-exists",
+              "leftValue": "={{ $('Check If From Lead').all() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -600,
+        400
+      ],
+      "id": "if-lead-exists",
+      "name": "If Lead Exists"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "messages",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "lead_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Check If From Lead').item.json.id }}"
+            }
+          ]
+        },
+        "sort": {
+          "sortKey": "created_at",
+          "sortOrder": "ASC"
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        300
+      ],
+      "id": "get-conversation-history",
+      "name": "Get Conversation History",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "salesurance_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"email_body\": \"\"\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        400,
+        300
+      ],
+      "id": "response-output-parser",
+      "name": "Response Output Parser"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-opus-4.1",
+        "options": {
+          "maxTokens": 8000,
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        200,
+        500
+      ],
+      "id": "opus-model",
+      "name": "Opus 4.1 Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "EtWjHAO0ZQQs37QB",
+          "name": "OpenRouter"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Inbound Email:\nFrom: {{ $('Gmail Trigger').item.json.from }}\nSubject: {{ $('Gmail Trigger').item.json.subject }}\nBody: {{ $('Gmail Trigger').item.json.textPlain }}\n\nLead Information:\nName: {{ $('Check If From Lead').item.json.first_name }} {{ $('Check If From Lead').item.json.last_name }}\nCompany: {{ $('Check If From Lead').item.json.company }}\nJob Title: {{ $('Check If From Lead').item.json.job_title }}\nResearch: {{ JSON.stringify($('Check If From Lead').item.json.research_results) }}\n\nConversation History:\n{{ $('Get Conversation History').all().map(msg => `[${msg.json.created_at}] ${msg.json.channel} - ${msg.json.status}: ${msg.json.subject || 'No Subject'}\n${msg.json.message}`).join('\n\n---\n\n') }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "<!-- AI agent for generating contextual email responses to inbound lead replies -->\\n\\n<AgentInstructions>\\n\\n    <Role>\\n        <Name>Customer Response Agent</Name>\\n        <Task>Generate intelligent, contextual email responses to inbound lead replies based on conversation history and lead intelligence</Task>\\n        <Goal>Maintain professional conversations that move leads toward demo bookings while being helpful and natural</Goal>\\n    </Role>\\n\\n    <Thinking>\\n        <Step>Analyze the entire conversation thread and identify lead's current intent/question</Step>\\n        <Step>Review lead's company information and research data for context</Step>\\n        <Step>Determine appropriate response tone (answering questions vs following up vs scheduling)</Step>\\n        <Step>Address lead's specific concerns or questions directly</Step>\\n        <Step>Include relevant value proposition based on their expressed interests</Step>\\n        <Step>End with appropriate next step (demo booking, additional info, etc.)</Step>\\n        <Step>Ensure response feels natural and conversational, not automated</Step>\\n        <Step>Keep professional German \\\"Du\\\" form consistent with outreach style</Step>\\n    </Thinking>\\n\\n    <Context>\\n        <InboundEmail>Lead's latest email with their questions, concerns, or responses</InboundEmail>\\n        <ConversationHistory>All previous messages in chronological order for full context</ConversationHistory>\\n        <LeadData>Complete lead information including company, role, and research intelligence</LeadData>\\n        <OurProduct>White-label Standortmarketing-Plattform für Marketing-Agenturen zur Skalierung ihrer Local-SEO-Services</OurProduct>\\n        <ResponsePurpose>Continue conversation naturally while moving toward demo scheduling</ResponsePurpose>\\n    </Context>\\n\\n    <Instructions>\\n        <Instruction>Read and understand the lead's latest message completely - identify their main question/concern</Instruction>\\n        <Instruction>Review conversation history to understand context and avoid repetition</Instruction>\\n        <Instruction>Use lead's company and research data to personalize the response appropriately</Instruction>\\n        <Instruction>Address their specific questions directly and helpfully</Instruction>\\n        <Instruction>Provide value through insights relevant to their business/challenges</Instruction>\\n        <Instruction>Include social proof or specific benefits when addressing concerns</Instruction>\\n        <Instruction>End with a natural next step that moves toward demo booking</Instruction>\\n        <Instruction>Keep tone conversational and professional using \\\"Du\\\" form</Instruction>\\n    </Instructions>\\n\\n    <Rules>\\n        <Rule>CONTEXT AWARENESS: Reference their previous questions/concerns appropriately</Rule>\\n        <Rule>DIRECT ANSWERS: Address their specific questions before adding additional value</Rule>\\n        <Rule>GERMAN STYLE: Use \\\"Du\\\" form, casual-professional tone, avoid buzzwords</Rule>\\n        <Rule>PERSONALIZATION: Include 1-2 references to their company/industry from lead data</Rule>\\n        <Rule>VALUE FOCUS: Always include insight or benefit relevant to their situation</Rule>\\n        <Rule>NATURAL FLOW: Response should feel like continuation of conversation, not template</Rule>\\n        <Rule>CLEAR NEXT STEP: End with specific, actionable next step appropriate to their readiness</Rule>\\n        <Rule>EMAIL LENGTH: Keep responses concise but comprehensive (400-800 characters)</Rule>\\n    </Rules>\\n\\n    <OutputStructure>\\n        <Format>\\n            <email_body>Professional response addressing their message ≤800 chars</email_body>\\n        </Format>\\n    </OutputStructure>\\n\\n</AgentInstructions>",
+          "maxIterations": 10
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        100,
+        300
+      ],
+      "id": "response-agent",
+      "name": "Response Agent"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "tableId": "messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "lead_id",
+              "fieldValue": "={{ $('Check If From Lead').item.json.id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "={{ $('Check If From Lead').item.json.campaign_id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "received"
+            },
+            {
+              "fieldId": "channel",
+              "fieldValue": "email"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "={{ $('Gmail Trigger').item.json.subject }}"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $('Gmail Trigger').item.json.textPlain }}"
+            },
+            {
+              "fieldId": "sender",
+              "fieldValue": "={{ $('Gmail Trigger').item.json.from }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ new Date().toISOString() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        700,
+        200
+      ],
+      "id": "store-inbound-email",
+      "name": "Store Inbound Email",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "salesurance_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "tableId": "messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "lead_id",
+              "fieldValue": "={{ $('Check If From Lead').item.json.id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "={{ $('Check If From Lead').item.json.campaign_id }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "scheduled"
+            },
+            {
+              "fieldId": "channel",
+              "fieldValue": "email"
+            },
+            {
+              "fieldId": "subject",
+              "fieldValue": "=Re: {{ $('Gmail Trigger').item.json.subject }}"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $('Response Agent').item.json.output.email_body }}"
+            },
+            {
+              "fieldId": "sender",
+              "fieldValue": "marian@salesurance.co"
+            },
+            {
+              "fieldId": "due",
+              "fieldValue": "={{ new Date(Date.now() + 30 * 60 * 1000).toISOString() }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ new Date().toISOString() }}"
+            },
+            {
+              "fieldId": "email_thread_data",
+              "fieldValue": "={{ JSON.stringify({\n  thread_id: `reply-thread-${$('Check If From Lead').item.json.id}-${$('Check If From Lead').item.json.campaign_id}`,\n  message_id: `<reply-${Date.now()}@salesurance.co>`,\n  parent_message_id: null,\n  references: []\n}) }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        700,
+        400
+      ],
+      "id": "store-ai-response",
+      "name": "Store AI Response",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "salesurance_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Check If From Lead').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "replied"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ new Date().toISOString() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        300
+      ],
+      "id": "update-lead-status",
+      "name": "Update Lead Status",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9xVJyFbETt2Ws3mX",
+          "name": "salesurance_supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        600
+      ],
+      "id": "unknown-sender",
+      "name": "Unknown Sender - Do Nothing"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Check If From Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If From Lead": {
+      "main": [
+        [
+          {
+            "node": "If Lead Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Lead Exists": {
+      "main": [
+        [
+          {
+            "node": "Get Conversation History",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Unknown Sender - Do Nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Conversation History": {
+      "main": [
+        [
+          {
+            "node": "Response Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Response Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Opus 4.1 Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Response Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Response Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response Agent": {
+      "main": [
+        [
+          {
+            "node": "Store Inbound Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Store AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Inbound Email": {
+      "main": [
+        [
+          {
+            "node": "Update Lead Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store AI Response": {
+      "main": [
+        [
+          {
+            "node": "Update Lead Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Berlin",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [
+    {
+      "name": "salesurance"
+    }
+  ]
+}
