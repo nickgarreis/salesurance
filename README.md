@@ -1,6 +1,6 @@
 # Agentic Marketing System
 
-**AI-Powered Email Outreach Automation Platform**
+**AI-Powered Email Outreach Automation System**
 
 ## 🚀 Key Features
 
