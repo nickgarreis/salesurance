@@ -28,12 +28,4 @@ schemas = ["public", "graphql_public"]
 extra_search_path = ["public", "extensions"]
 
 # Edge Functions configuration
-[functions.send-email]
-verify_jwt = false
-
-
-[functions.receive-emails]
-verify_jwt = false
-
-[functions.resend-webhook]
-verify_jwt = false
+# All edge functions have been removed
